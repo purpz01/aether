@@ -88,7 +88,8 @@ final class MainGUIChromeRenderer {
             }
         }
 
-        float settingsTabY = context.layout.py + context.layout.ph - MainGUI.SB_BOT_PAD - 44f;
+        float profileTabY = context.layout.py + context.layout.ph - MainGUI.SB_BOT_PAD - 44f;
+        float settingsTabY = profileTabY - 44f - MainGUI.SB_SEP_GAP;
         float keybindsTabY = settingsTabY - 44f;
         float hudPositionsTabY = keybindsTabY - 44f;
         nvg.rect(context.layout.px + MainGUI.SB_H_PAD, hudPositionsTabY - MainGUI.SB_SEP_GAP,
@@ -167,6 +168,10 @@ final class MainGUIChromeRenderer {
             nvg.restore();
         }
 
+        nvg.rect(context.layout.px + MainGUI.SB_H_PAD, profileTabY - MainGUI.SB_SEP_GAP,
+                sbW - MainGUI.SB_H_PAD * 2f, 1f, Theme.SEPARATOR);
+        renderFarmProfile(nvg, context, textX, profileTabY);
+
         nvg.popScissor();
     }
 
@@ -175,16 +180,11 @@ final class MainGUIChromeRenderer {
         String name = owner.currentTabName();
         String desc = owner.currentTabDescription();
 
-        float profileW = renderFarmProfile(nvg, context.layout.contX + 20f, context.layout.contY);
-        float profileSepX = context.layout.contX + 20f + profileW + 12f;
-        nvg.rect(profileSepX, context.layout.contY + 17f, 1f, 19f, Theme.SEPARATOR);
-
-        float nameX = profileSepX + 12f;
         float nameY = context.layout.contY + (MainGUI.TOP_BAR_H - 15f) / 2f;
-        nvg.text(Fonts.BOLD, name, nameX, nameY, 15f, Theme.TEXT_PRIMARY);
+        nvg.text(Fonts.BOLD, name, context.layout.contX + 20f, nameY, 15f, Theme.TEXT_PRIMARY);
 
         float nameW = nvg.textWidth(Fonts.BOLD, name, 15f);
-        float sepX = nameX + nameW + 10f;
+        float sepX = context.layout.contX + 20f + nameW + 10f;
         nvg.rect(sepX, context.layout.contY + 17f, 1f, 19f, Theme.SEPARATOR);
 
         float descY = context.layout.contY + (MainGUI.TOP_BAR_H - 12f) / 2f;
@@ -240,22 +240,28 @@ final class MainGUIChromeRenderer {
         nvg.rect(context.layout.contX, context.layout.contY + MainGUI.TOP_BAR_H, context.layout.contW, 1f, Theme.SEPARATOR);
     }
 
-    private float renderFarmProfile(NVGRenderer nvg, float x, float contY) {
-        float headSize = 20f;
-        float gap = 7f;
-        String hours = formatFarmedHours(MacroStateManager.getLifetimeRunningTime());
-        String label = "HOURS FARMED";
-        float textSize = 12f;
-        float labelSize = 8f;
-        float textW = Math.max(nvg.textWidth(Fonts.BOLD, hours, textSize), nvg.textWidth(Fonts.BOLD, label, labelSize));
-        float cy = contY + MainGUI.TOP_BAR_H / 2f;
-        float textX = x + headSize + gap;
+    private void renderFarmProfile(NVGRenderer nvg, MainGUIContext context, float textX, float rowY) {
+        float headSize = 28f;
+        float pillY = rowY + MainGUI.SB_ROW_PAD;
+        float headX = context.layout.px + MainGUI.SB_H_PAD + (MainGUI.SB_PILL - headSize) / 2f;
+        float headY = pillY + (MainGUI.SB_PILL - headSize) / 2f;
 
-        SkinFaceProvider.render(nvg, x, cy - headSize / 2f, headSize, 1f);
-        nvg.text(Fonts.BOLD, hours, textX, cy - textSize + 2f, textSize, Theme.ACCENT_PRIMARY);
-        nvg.text(Fonts.BOLD, label, textX, cy + 2f, labelSize, Theme.TEXT_TERTIARY);
+        SkinFaceProvider.render(nvg, headX, headY, headSize, 1f);
 
-        return headSize + gap + textW;
+        if (context.animation.sidebarAnim > 0.01f) {
+            String hours = formatFarmedHours(MacroStateManager.getLifetimeRunningTime());
+            String label = "HOURS FARMED";
+            float textSize = 12f;
+            float labelSize = 8f;
+            float cy = pillY + MainGUI.SB_PILL / 2f;
+
+            nvg.save();
+            nvg.globalAlpha(context.animation.sidebarAnim);
+            nvg.translate((1f - context.animation.sidebarAnim) * -6f, 0f);
+            nvg.text(Fonts.BOLD, hours, textX, cy - textSize + 1f, textSize, Theme.ACCENT_PRIMARY);
+            nvg.text(Fonts.BOLD, label, textX, cy + 2f, labelSize, Theme.TEXT_TERTIARY);
+            nvg.restore();
+        }
     }
 
     private static String formatFarmedHours(long ms) {
