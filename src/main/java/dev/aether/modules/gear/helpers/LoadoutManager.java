@@ -23,6 +23,7 @@ public class LoadoutManager {
     public static volatile int targetLoadoutSlot = -1;
     public static volatile boolean shouldRestartFarmingAfterSwap = false;
     public static volatile long loadoutOpenPendingTime = 0;
+    public static volatile long loadoutFirstClickDelayMs = 0;
     public static volatile boolean loadoutGuiDetected = false;
     public static volatile long loadoutTimelineStartTime = 0;
 
@@ -36,6 +37,7 @@ public class LoadoutManager {
         loadoutInteractionStage = 0;
         loadoutGuiDetected = false;
         loadoutOpenPendingTime = 0;
+        loadoutFirstClickDelayMs = 0;
         loadoutTimelineStartTime = 0;
     }
 
@@ -77,6 +79,8 @@ public class LoadoutManager {
         loadoutInteractionTime = 0;
         loadoutInteractionStage = 0;
         loadoutTimelineStartTime = 0;
+        loadoutOpenPendingTime = 0;
+        loadoutFirstClickDelayMs = 0;
         shouldRestartFarmingAfterSwap = true;
         MacroStateManager.setCurrentState(MacroState.State.WARDROBE);
         ClientUtils.sendDebugMessage("Triggering loadout swap to slot " + slot);
@@ -104,6 +108,8 @@ public class LoadoutManager {
         loadoutInteractionTime = 0;
         loadoutInteractionStage = 0;
         loadoutTimelineStartTime = 0;
+        loadoutOpenPendingTime = 0;
+        loadoutFirstClickDelayMs = 0;
         ClientUtils.sendCommand("/loadout");
     }
 
@@ -118,6 +124,8 @@ public class LoadoutManager {
         loadoutInteractionTime = 0;
         loadoutInteractionStage = 0;
         loadoutTimelineStartTime = 0;
+        loadoutOpenPendingTime = 0;
+        loadoutFirstClickDelayMs = 0;
 
         if (MacroStateManager.getCurrentState() == MacroState.State.WARDROBE) {
             MacroStateManager.setCurrentState(MacroState.State.FARMING);
@@ -144,6 +152,8 @@ public class LoadoutManager {
         if (!loadoutGuiDetected) {
             loadoutGuiDetected = true;
             loadoutTimelineStartTime = now;
+            loadoutOpenPendingTime = now;
+            loadoutFirstClickDelayMs = ClientUtils.getGuiClickDelayMs(true);
             sendTimedDebug(client, "Loadout GUI opened", now);
         }
 
@@ -169,6 +179,10 @@ public class LoadoutManager {
             return;
         }
 
+        if (now - loadoutOpenPendingTime < loadoutFirstClickDelayMs) {
+            return;
+        }
+
         sendTimedDebug(client, "Clicked loadout slot " + targetLoadoutSlot, now);
         ClientUtils.performSlotClick(screen, slot.index, 0, ContainerInput.PICKUP);
         loadoutInteractionTime = now;
@@ -185,6 +199,8 @@ public class LoadoutManager {
         isSwappingLoadout = false;
         loadoutGuiDetected = false;
         loadoutInteractionStage = 0;
+        loadoutOpenPendingTime = 0;
+        loadoutFirstClickDelayMs = 0;
 
         if (client.player != null) {
             sendTimedDebug(client, "Loadout GUI close requested", now);
@@ -242,6 +258,8 @@ public class LoadoutManager {
             isSwappingLoadout = false;
             loadoutGuiDetected = false;
             loadoutInteractionStage = 0;
+            loadoutOpenPendingTime = 0;
+            loadoutFirstClickDelayMs = 0;
             handleLoadoutCompletion(client);
         }
     }
