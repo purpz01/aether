@@ -701,6 +701,7 @@ public final class AetherConfig {
 
         // -- HUD POSITIONS ---------------------------------------------------------
         public static final BooleanEntry CUSTOM_UI_ENABLED = Config.bool("customUiEnabled", false);
+        public static final BooleanEntry SIMPLE_CONFIG_GUI = Config.bool("simpleConfigGui", false);
         public static final BooleanEntry STREAMER_MODE = Config.bool("streamerMode", false);
 
         public static final IntEntry HUD_THEME = Config.integer("hudTheme", 2).range(0, 3);

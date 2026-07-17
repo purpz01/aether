@@ -25,6 +25,12 @@ public final class BootstrapSettingsRegistryProvider implements MainGUIRegistryP
                     AetherConfig.CUSTOM_UI_ENABLED.set(value);
                     AetherConfig.save();
                 }));
+        group.add(new ToggleSetting("Simple Config GUI",
+                () -> AetherConfig.SIMPLE_CONFIG_GUI.get(),
+                value -> {
+                    AetherConfig.SIMPLE_CONFIG_GUI.set(value);
+                    AetherConfig.save();
+                }));
         return MainGUIRegistry.subTab("Bootstrap", "Pre-login bootstrap settings", List.of(group));
     }
 }

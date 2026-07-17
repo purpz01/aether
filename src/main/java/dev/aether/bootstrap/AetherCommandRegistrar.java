@@ -79,9 +79,19 @@ public final class AetherCommandRegistrar {
             dispatcher.register(
                     ClientCommands.literal("aether")
                             .executes(ctx -> {
-                                AetherUiActions.toggleMainGui();
+                                AetherUiActions.toggleConfigGui();
                                 return 1;
                             })
+                            .then(ClientCommands.literal("simple")
+                                    .executes(ctx -> {
+                                        AetherUiActions.setSimpleConfigGui(true);
+                                        return 1;
+                                    }))
+                            .then(ClientCommands.literal("custom")
+                                    .executes(ctx -> {
+                                        AetherUiActions.setSimpleConfigGui(false);
+                                        return 1;
+                                    }))
                             .then(ClientCommands.literal("farming")
                                     .executes(ctx -> {
                                         Minecraft client = Minecraft.getInstance();

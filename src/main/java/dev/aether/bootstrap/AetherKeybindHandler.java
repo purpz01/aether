@@ -39,9 +39,9 @@ public final class AetherKeybindHandler {
             return;
         }
         tickHandlerRegistered = true;
-        ClientTickEvents.START_CLIENT_TICK.register(client -> {
+            ClientTickEvents.START_CLIENT_TICK.register(client -> {
                         while (AetherKeybindRegistry.getClickGuiKey().consumeClick()) {
-                AetherUiActions.toggleMainGui();
+                AetherUiActions.toggleConfigGui();
             }
 
             if (client.player == null) {
