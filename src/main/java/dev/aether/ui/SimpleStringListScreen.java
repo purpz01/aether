@@ -176,9 +176,8 @@ public final class SimpleStringListScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(font, title, width / 2, 12, 0xFFFFFFFF);
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.centeredText(font, title, width / 2, 12, 0xFFFFFFFF);
     }
 
     @Override

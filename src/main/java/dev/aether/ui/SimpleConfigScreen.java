@@ -455,7 +455,7 @@ public final class SimpleConfigScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
         graphics.centeredText(font, Component.literal(pageTitle()), width / 2, 12, 0xFFFFFFFF);
         if (maxScroll > 0) {
             graphics.centeredText(font,
@@ -463,7 +463,6 @@ public final class SimpleConfigScreen extends Screen {
                             + Math.min(itemCount, scrollOffset + rowsPerPage()) + " of " + itemCount),
                     width / 2, 26, 0xFFAAAAAA);
         }
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
     private String pageTitle() {
