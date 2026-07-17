@@ -61,14 +61,14 @@ The simple GUI renders existing `Setting` objects without copying their configur
 - `TextSetting`: vanilla text field; commit on Enter, focus loss, or Done.
 - `DropdownSetting`: cycle button over its existing options.
 - `DropdownListSetting`: vanilla child editor for the existing list of dropdown selections.
-- `MultiDropdownSetting`: vanilla on/off rows for each existing option.
 - `ListSetting`: vanilla child editor with add, edit, and remove operations.
 - `ActionSetting`: ordinary action button.
 - `InfoSetting`: wrapped read-only text.
+- `PositionSetting`: three vanilla coordinate fields, a capture-position button, and its highlight toggle.
 
 Module and group enable states use ordinary on/off buttons. Changing a value calls the setting's existing setter, so persistence and side effects remain identical to `MainGUI`.
 
-`ColorSetting`, `PositionSetting`, and `KeybindSetting` are intentionally not rendered. Any future unknown setting type in an operational section is shown as a disabled `Not supported in Simple GUI` row instead of being silently omitted.
+`ColorSetting`, `MultiDropdownSetting`, and `KeybindSetting` are intentionally not rendered because their current registrations are cosmetic or keybind customization outside the operational sections. Any future unknown setting type in an operational section is shown as a disabled `Not supported in Simple GUI` row instead of being silently omitted.
 
 ## Lifecycle and Failure Handling
 
@@ -85,7 +85,7 @@ Automated checks cover logic that does not require rendering:
 - GUI mode is persisted when the simple/custom command action runs.
 - `/aether` and the keybind route to the selected screen type.
 - Only `farming`, `other`, and `failsafes` sections are included.
-- Visual sections and color/position/keybind setting types are excluded.
+- Visual sections and color/multi-dropdown/keybind setting types are excluded.
 - Supported setting types use their existing getters and setters.
 - Range controls cannot cross their lower/upper bounds.
 
