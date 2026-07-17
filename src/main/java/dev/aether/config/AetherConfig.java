@@ -444,6 +444,8 @@ public final class AetherConfig {
         public static final BooleanEntry SUNSET_PESTS = Config.bool("sunsetPests", false);
         public static final BooleanEntry PEST_DISCO_DESTINATION_MODE = Config.bool("pestDiscoDestinationMode", false);
         public static final StringEntry PEST_DISCO_DESTINATION_PLOT = Config.string("pestDiscoDestinationPlot", "0");
+        public static final BooleanEntry PEST_DISCOLESS_MODE = Config.bool("pestDiscolessMode", false);
+        public static final StringEntry PEST_DISCOLESS_PLOT = Config.string("pestDiscolessPlot", "0");
         public static final BooleanEntry PEST_AOTV_BETWEEN = Config.bool("pestAotvBetween", false);
         public static final BooleanEntry PEST_AOTV_CONFIRM_BETWEEN = Config.bool("pestAotvConfirmBetween", false);
         public static final IntEntry PEST_AOTV_DELAY_MIN = Config.integer("pestAotvDelayMin", 150).range(100, 250);
@@ -675,6 +677,8 @@ public final class AetherConfig {
         public static final StringEntry REMOTE_CONTROL_GUILD_ID = Config.string("remoteControlGuildId", "");
         public static final StringEntry REMOTE_CONTROL_CHANNEL_ID = Config.string("remoteControlChannelId", "");
         public static final StringEntry REMOTE_CONTROL_COMMAND_PREFIX = Config.string("remoteControlCommandPrefix", "!aether");
+        /** JSON object mapping Discord channel id to the user id pinged on failsafe. */
+        public static final StringEntry REMOTE_CONTROL_PING_TARGETS = Config.string("remoteControlPingTargets", "{}");
 
         // -- PROFIT / HUD ----------------------------------------------------------
 
@@ -974,7 +978,7 @@ public final class AetherConfig {
         public static final FloatEntry HAT_RADIUS = Config.floatVal("hatRadius", 0.8f).range(0.1f, 3.0f);
         public static final IntEntry HAT_VERTICES = Config.integer("hatVertices", 20).range(3, 30);
         public static final FloatEntry HAT_Y_OFFSET = Config.floatVal("hatYOffset", 0.2f).range(0.0f, 3.0f);
-        public static final BooleanEntry FUNNY_DYNAMIC_REST = Config.bool("funnyDynamicRest", false);
+        public static final BooleanEntry FUNNY_DYNAMIC_REST = Config.bool("funnyDynamicRest", true);
         public static final BooleanEntry FREECAM_ENABLED = Config.bool("freecamEnabled", true);
         public static final FloatEntry FREECAM_SPEED = Config.floatVal("freecamSpeed", 0.45f).range(0.1f, 2.5f);
         public static final BooleanEntry FREELOOK_ENABLED = Config.bool("freelookEnabled", true);

@@ -106,7 +106,9 @@ public class MainGUI extends NVGScreen {
      * Scale multiplier for the entire menu.
      * 1.0 = every layout unit is exactly 1 physical pixel.
      * Increase to make the menu larger, decrease to shrink it.
-     * Wire to a slider in the Settings tab once that exists.
+     * Persisted value lives in {@link dev.aether.ui.theme.Theme#UI_SCALE} (the source of truth);
+     * MainGUI syncs this from it each frame in syncFrameLayoutForWindowSize, except while a slider
+     * is being dragged (so the UI Scale slider can't feed back). Edit via the slider in Theme Options.
      */
     public static float uiScale = 1.5f;
     public static float uiTextScale = 1;
@@ -2224,6 +2226,12 @@ public class MainGUI extends NVGScreen {
     }
 
     private void syncFrameLayoutForWindowSize(float prevPhysW, float prevPhysH) {
+        // Apply the persisted GUI scale, but hold it steady while a slider is being dragged: the
+        // UI Scale slider lives inside this panel, so rescaling mid-drag would shift the slider's
+        // own coordinate space under the cursor and run the value away to max.
+        if (dragSetting == null && dragRangeSetting == null) {
+            uiScale = Theme.UI_SCALE;
+        }
         boolean sizeChanged = context.layout.lastWidth != width
                 || context.layout.lastHeight != height
                 || Math.abs(context.layout.lastPixelRatio - pr) > 0.001f

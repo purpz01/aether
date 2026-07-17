@@ -168,6 +168,11 @@ public class Theme {
     /** Target animation time for GUI components in milliseconds. */
     public static float ANIM_TIME_MS = 250f;
 
+    public static final float UI_SCALE_MIN = 0.5f;
+    public static final float UI_SCALE_MAX = 3.0f;
+    /** Global scale of the /aether GUI panel (1.0 = pixel-perfect). Mirrored into MainGUI.uiScale at load. */
+    public static float UI_SCALE = 1.5f;
+
     /** Extra vertical spacing between settings within a module card (px). */
     public static int SETTING_SPACING = 4;
 
@@ -270,6 +275,7 @@ public class Theme {
         }
         obj.addProperty("animSpeed", ANIM_TIME_MS);
         obj.addProperty("settingSpacing", SETTING_SPACING);
+        obj.addProperty("uiScale", UI_SCALE);
         JsonArray rainbowArr = new JsonArray();
         for (String s : rainbowEntries) rainbowArr.add(s);
         obj.add("rainbowEntries", rainbowArr);
@@ -298,6 +304,7 @@ public class Theme {
             }
             if (obj.has("animSpeed"))     ANIM_TIME_MS    = parseAnimationTime(obj.get("animSpeed").getAsFloat());
             if (obj.has("settingSpacing")) SETTING_SPACING = obj.get("settingSpacing").getAsInt();
+            if (obj.has("uiScale"))       UI_SCALE        = Math.max(UI_SCALE_MIN, Math.min(UI_SCALE_MAX, obj.get("uiScale").getAsFloat()));
             rainbowEntries.clear();
             if (obj.has("rainbowEntries")) {
                 obj.get("rainbowEntries").getAsJsonArray()
@@ -320,6 +327,7 @@ public class Theme {
         }
         obj.addProperty("animSpeed", ANIM_TIME_MS);
         obj.addProperty("settingSpacing", SETTING_SPACING);
+        obj.addProperty("uiScale", UI_SCALE);
         JsonArray rainbowArr2 = new JsonArray();
         for (String s : rainbowEntries) rainbowArr2.add(s);
         obj.add("rainbowEntries", rainbowArr2);
@@ -343,6 +351,7 @@ public class Theme {
             }
             if (obj.has("animSpeed"))     ANIM_TIME_MS    = parseAnimationTime(obj.get("animSpeed").getAsFloat());
             if (obj.has("settingSpacing")) SETTING_SPACING = obj.get("settingSpacing").getAsInt();
+            if (obj.has("uiScale"))       UI_SCALE        = Math.max(UI_SCALE_MIN, Math.min(UI_SCALE_MAX, obj.get("uiScale").getAsFloat()));
             rainbowEntries.clear();
             if (obj.has("rainbowEntries")) {
                 obj.get("rainbowEntries").getAsJsonArray()
