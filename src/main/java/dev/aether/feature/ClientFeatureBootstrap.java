@@ -20,6 +20,7 @@ import dev.aether.modules.visuals.StreamerModeManager;
 import dev.aether.notification.NotificationManager;
 import dev.aether.renderer.FunRenderer;
 import dev.aether.renderer.PositionHighlighter;
+import dev.aether.ui.MainGUI;
 import dev.aether.ui.theme.Theme;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
@@ -42,6 +43,7 @@ public final class ClientFeatureBootstrap {
         AetherConfig.init();
         FailsafeSoundManager.init();
         Theme.loadTheme();
+        MainGUI.uiScale = Theme.UI_SCALE; // apply persisted GUI scale (Theme is the source of truth)
         ProfitManager.loadLifetime();
         ProfitManager.loadDaily();
         MacroStateManager.syncFromConfig();

@@ -28,6 +28,15 @@ public final class ThemeOptionsSettingsRegistryProvider extends AbstractSettings
                             Theme.saveTheme();
                         })
                         .withDecimals(0).withSuffix("ms"))
+                .add(new SliderSetting("UI Scale", Theme.UI_SCALE_MIN, Theme.UI_SCALE_MAX,
+                        () -> Theme.UI_SCALE,
+                        value -> {
+                            // Only update the persisted value; MainGUI applies it to uiScale each
+                            // frame (paused during the drag) so the slider can't feed back to max.
+                            Theme.UI_SCALE = value;
+                            Theme.saveTheme();
+                        })
+                        .withDecimals(2).withSuffix("x"))
                 .add(new ActionSetting("Export Theme (Copy)", () -> {
                     String json = Theme.exportJson();
                     Minecraft.getInstance().keyboardHandler.setClipboard(json);
@@ -36,6 +45,7 @@ public final class ThemeOptionsSettingsRegistryProvider extends AbstractSettings
                     String json = Minecraft.getInstance().keyboardHandler.getClipboard();
                     if (json != null && !json.isBlank()) {
                         Theme.importJson(json);
+                        MainGUI.uiScale = Theme.UI_SCALE; // apply imported scale to the live panel
                         Theme.saveTheme();
                     }
                 })));

@@ -10,6 +10,7 @@ import dev.aether.renderer.AetherRenderQueue;
 import dev.aether.renderer.NVGRenderer;
 import dev.aether.renderer.NanoVGManager;
 import dev.aether.ui.MainGUI;
+import dev.aether.ui.SimpleConfigScreen;
 import dev.aether.ui.theme.Theme;
 import dev.aether.util.ClientUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
@@ -93,7 +94,7 @@ public class HudRegistry {
             if (mc.screen instanceof HudEditScreen) return;
 
             // MainGUI renders HUD elements itself (Gui.render() is suppressed while it's open)
-            if (mc.screen instanceof MainGUI) return;
+            if (mc.screen instanceof MainGUI || mc.screen instanceof SimpleConfigScreen) return;
             if (StreamerModeManager.isEnabled()) {
                 hudAlpha = 0f;
                 return;

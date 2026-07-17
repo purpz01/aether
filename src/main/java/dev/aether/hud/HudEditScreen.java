@@ -22,7 +22,7 @@ import org.lwjgl.glfw.GLFW;
  *
  * <ul>
  *   <li><b>Drag</b> - reposition a panel</li>
- *   <li><b>Ctrl + Drag</b> - resize (scale) a panel</li>
+ *   <li><b>Ctrl/Shift + Drag</b> - resize (scale) a panel (Shift is the reliable modifier on macOS)</li>
  *   <li><b>Snap toggle</b> - snaps drag positions to a {@value #GRID_PX}px grid</li>
  *   <li><b>ESC / INSERT</b> - close</li>
  * </ul>
@@ -142,7 +142,7 @@ public class HudEditScreen extends Screen {
 
         // Center hint
         nvg.textCentered(Fonts.REGULAR,
-                "Drag to move  \u2022  Ctrl+Drag to scale  \u2022  Toggle Snap for grid alignment",
+                "Drag to move  \u2022  Ctrl/Shift+Drag to scale  \u2022  Toggle Snap for grid alignment",
                 0, tbY, width, TOOLBAR_H, 10f, Theme.TEXT_SECONDARY);
 
         float margin = 14f;
@@ -182,16 +182,24 @@ public class HudEditScreen extends Screen {
         double mx = click.x(), my = click.y();
         mouseX = mx; mouseY = my;
 
-        if (click.button() == 0) {
+        int button = click.button();
+        // Toolbar buttons are left-click only.
+        if (button == 0) {
             if (hov(btnDoneX, btnBaseY, BTN_W, BTN_H)) { onClose(); return true; }
             if (hov(btnSnapX, btnBaseY, BTN_W, BTN_H)) { snapToGrid = !snapToGrid; return true; }
+        }
 
-            boolean ctrl = (click.modifiers() & GLFW.GLFW_MOD_CONTROL) != 0;
+        // Resize = Ctrl/Shift + drag. On macOS Ctrl+left-click arrives as a right-click
+        // (button 1), so accept button 1 too whenever a resize modifier is held.
+        boolean resizeMod = (click.modifiers() & (GLFW.GLFW_MOD_CONTROL | GLFW.GLFW_MOD_SHIFT)) != 0;
+        boolean move   = button == 0 && !resizeMod;
+        boolean resize = resizeMod && (button == 0 || button == 1);
+        if (move || resize) {
             for (HudElement e : HudRegistry.ELEMENTS) {
                 if (!e.isEnabled()) continue;
                 if (e.isHovered(mx, my)) {
                     activeElement = e;
-                    e.startDrag(mx, my, ctrl);
+                    e.startDrag(mx, my, resize);
                     return true;
                 }
             }
@@ -202,7 +210,8 @@ public class HudEditScreen extends Screen {
     @Override
     public boolean mouseDragged(MouseButtonEvent click, double dx, double dy) {
         mouseX = click.x(); mouseY = click.y();
-        if (click.button() == 0 && activeElement != null) {
+        // Gate on an active gesture, not the button: a macOS resize drag reports button 1.
+        if (activeElement != null) {
             var win = Minecraft.getInstance().getWindow();
             activeElement.drag(click.x(), click.y(),
                     win.getGuiScaledWidth(), win.getGuiScaledHeight(),
@@ -214,7 +223,7 @@ public class HudEditScreen extends Screen {
 
     @Override
     public boolean mouseReleased(MouseButtonEvent click) {
-        if (click.button() == 0 && activeElement != null) {
+        if (activeElement != null) {
             activeElement.endDrag();
             activeElement = null;
         }

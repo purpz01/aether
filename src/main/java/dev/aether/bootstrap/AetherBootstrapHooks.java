@@ -3,6 +3,7 @@ package dev.aether.bootstrap;
 import com.mojang.authlib.GameProfile;
 import dev.aether.renderer.NVGRenderer;
 import dev.aether.ui.MainGUI;
+import dev.aether.ui.SimpleConfigScreen;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -253,7 +254,7 @@ public final class AetherBootstrapHooks {
     }
 
     public static boolean isBootstrapConfigScreen(Screen screen) {
-        return screen instanceof MainGUI;
+        return screen instanceof MainGUI || screen instanceof SimpleConfigScreen;
     }
 
     public static void renderConfigScreenOverlay(NVGRenderer renderer, float width, float height, float deltaTime) {
