@@ -17,6 +17,7 @@ local.gradle
 .claude/
 build/
 .gstack/
+.worktrees/
 mappings/
 .gradle/tools/
 CLAUDE.md 
