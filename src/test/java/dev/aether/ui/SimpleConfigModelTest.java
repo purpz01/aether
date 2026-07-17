@@ -1,6 +1,8 @@
 package dev.aether.ui;
 
+import dev.aether.ui.settings.ColorSetting;
 import dev.aether.ui.settings.SettingType;
+import dev.aether.ui.settings.ToggleSetting;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -31,6 +33,14 @@ final class SimpleConfigModelTest {
         assertFalse(SimpleConfigModel.supports(SettingType.COLOR));
         assertFalse(SimpleConfigModel.supports(SettingType.MULTI_DROPDOWN));
         assertFalse(SimpleConfigModel.supports(SettingType.KEYBIND));
+    }
+
+    @Test
+    void removesCustomizationSettingsFromOperationalRows() {
+        var toggle = new ToggleSetting("Macro toggle", () -> false, ignored -> {});
+        var color = new ColorSetting("Flash color", () -> 0, ignored -> {});
+
+        assertEquals(List.of(toggle), SimpleConfigModel.operationalSettings(List.of(toggle, color)));
     }
 
     @Test

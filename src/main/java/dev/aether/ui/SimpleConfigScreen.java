@@ -124,7 +124,7 @@ public final class SimpleConfigScreen extends Screen {
             if (!group.isAlwaysOn() && !group.isEnabled()) {
                 continue;
             }
-            for (Setting setting : group.getSettings()) {
+            for (Setting setting : SimpleConfigModel.operationalSettings(group.getSettings())) {
                 if (!setting.isVisible()) {
                     continue;
                 }

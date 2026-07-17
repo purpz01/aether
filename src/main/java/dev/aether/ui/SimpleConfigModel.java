@@ -1,5 +1,6 @@
 package dev.aether.ui;
 
+import dev.aether.ui.settings.Setting;
 import dev.aether.ui.settings.SettingType;
 
 import java.util.EnumSet;
@@ -33,6 +34,12 @@ final class SimpleConfigModel {
 
     static boolean supports(SettingType type) {
         return SUPPORTED_TYPES.contains(type);
+    }
+
+    static List<Setting> operationalSettings(List<Setting> settings) {
+        return settings.stream()
+                .filter(setting -> supports(setting.getType()))
+                .toList();
     }
 
     static double normalized(float value, float min, float max) {
